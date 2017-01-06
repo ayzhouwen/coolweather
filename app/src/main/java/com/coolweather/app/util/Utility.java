@@ -56,7 +56,7 @@ public class Utility {
                     try {
                         for (City node:list){
                             coolWeatherDB.saveCity(node);
-                                return  false;
+
 
                         }
                     } catch (Exception e) {
@@ -82,10 +82,7 @@ public class Utility {
                     if (list !=null &&list.size()>0){
                         try {
                             for (County node:list){
-
                                     coolWeatherDB.saveCounty(node);
-
-
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -4,24 +4,16 @@ package com.coolweather.app.model;
  * Created by admin on 2017/1/3.
  */
 
-public class Province {
-    private int id;
+public class Province extends AddressBase {
     private String provinceName;
     private String provienceCode;
 
-    public int getId(){
-        return id;
-    }
-
-    public void setId(int id){
-        this.id=id;
-    }
-    public String getProvinceName(){
-        return provinceName;
-    }
-
     public String getProvienceCode() {
         return provienceCode;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
     }
 
     public void setProvienceCode(String provienceCode) {

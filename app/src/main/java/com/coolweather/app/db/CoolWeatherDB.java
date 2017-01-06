@@ -20,7 +20,7 @@ public class CoolWeatherDB {
     //数据库名
     public  static final String DB_NAME="cool_weather";
     //数据库版本
-    public  static final int VERSION=2;
+    public  static final int VERSION=13;
 
     private static CoolWeatherDB coolWeatherDB;
 
@@ -47,8 +47,9 @@ public class CoolWeatherDB {
     public void saveProvince(Province province){
         if (province !=null){
             ContentValues values=new ContentValues();
-            values.put("province_name",province.getProvinceName());
-            values.put("province_code",province.getProvinceName());
+            values.put("province_name",province.getName());
+            values.put("province_code",province.getAreacode());
+            values.put("id",province.getId());
             db.insert("Province",null,values);
         }
     }
@@ -73,9 +74,10 @@ public class CoolWeatherDB {
     public void saveCity(City city){
         if (city !=null){
             ContentValues values =new ContentValues();
-            values.put("city_name",city.getCityName());
-            values.put("city_code",city.getCityCode());
-            values.put("province_id",city.getProvinceId());
+            values.put("city_name",city.getName());
+            values.put("city_code",city.getAreacode());
+            values.put("province_id",city.getParentid());
+            values.put("id",city.getId());
             db.insert("City",null,values);
 
         }
@@ -107,9 +109,10 @@ public class CoolWeatherDB {
     public  void saveCounty(County county){
         if (county !=null){
             ContentValues values =new ContentValues();
-            values.put("county_name",county.getCountyName());
-            values.put("county_code",county.getCountyCode());
-            values.put("county_id",county.getCityId());
+            values.put("county_name",county.getName());
+            values.put("county_code",county.getAreacode());
+            values.put("city_id",county.getCityId());
+            values.put("id",county.getId());
             db.insert("County",null,values);
         }
     }
@@ -133,4 +136,5 @@ public class CoolWeatherDB {
         }
         return  list;
     }
+
 }
