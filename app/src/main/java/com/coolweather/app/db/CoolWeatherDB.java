@@ -20,7 +20,7 @@ public class CoolWeatherDB {
     //数据库名
     public  static final String DB_NAME="cool_weather";
     //数据库版本
-    public  static final int VERSION=1;
+    public  static final int VERSION=2;
 
     private static CoolWeatherDB coolWeatherDB;
 
@@ -56,7 +56,7 @@ public class CoolWeatherDB {
 
     public List<Province> loadProvinces(){
         List<Province> list=new ArrayList<>();
-        Cursor cursor =db.query("Provience",null,null,null,null,null,null);
+        Cursor cursor =db.query("Province",null,null,null,null,null,null);
         if (cursor.moveToFirst()){
             do {
                 Province province=new Province();
