@@ -29,7 +29,7 @@ import app.coolweather.com.coolweather.R;
  * Created by admin on 2017/1/4.
  */
 
-//注意;queryFromServer重复调用自己,如果控制不好异常,有可能会出现死循环,
+//注意;queryFromServer重复调用自己,如果控制不好异常,有可能会出现死循环xxxx,
 public class ChooseAreaActivity extends Activity {
     public static final int LEVEL_PROVINCE=0;
     public static final int LEVEL_CITY=1;
