@@ -2,8 +2,11 @@ package com.coolweather.app.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -56,13 +59,21 @@ public class ChooseAreaActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//测试自己的return函数,自己的函数遇见return就打叉
+//        boolean y= testb();
+//        Log.d("ChooseAreaActivity",y+"");
+//        testv();
+//        int ti=testi();
+//        Log.d("ChooseAreaActivity","ti:"+ti+"");
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean("city_selected",false)){
+            Intent intent =new Intent(this,WeatherActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
-        boolean y= testb();
-        Log.d("ChooseAreaActivity",y+"");
-        testv();
-        int ti=testi();
-        Log.d("ChooseAreaActivity","ti:"+ti+"");
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.choose_area);
         listView=(ListView)findViewById(R.id.list_view);
         titleText=(TextView)findViewById(R.id.title_text);
@@ -78,6 +89,12 @@ public class ChooseAreaActivity extends Activity {
                 }else if (currentLevel==LEVEL_CITY){
                     selectedCity=cityList.get(position);
                     queryCounties();
+                }else if (currentLevel==LEVEL_COUNTY){
+                    String countyName=countyList.get(position).getCountyName();
+                    Intent intent =new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+                    intent.putExtra("couunty_name",countyName);//这里传递的是地区名,原文中传递的是地区代号
+                    startActivity(intent);
+                    //finish();
                 }
             }
         });
@@ -216,7 +233,7 @@ public class ChooseAreaActivity extends Activity {
                     }
                 });
             }
-        });
+        },"utf-8");
     }
 
     //显示进度对话框
