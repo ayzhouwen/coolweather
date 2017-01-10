@@ -55,6 +55,10 @@ public class ChooseAreaActivity extends Activity {
     private  City selectedCity;
     //选中的级别
     private int currentLevel;
+    //是否从weatherActivity中跳过来
+    private boolean isFromWeatherActivity;
+    //list当前选中的值
+    private  int listIndex;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,8 +69,9 @@ public class ChooseAreaActivity extends Activity {
 //        testv();
 //        int ti=testi();
 //        Log.d("ChooseAreaActivity","ti:"+ti+"");
+        isFromWeatherActivity=getIntent().getBooleanExtra("from_weather_activity",false);
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("city_selected",false)){
+        if (prefs.getBoolean("city_selected",false)&&!isFromWeatherActivity){
             Intent intent =new Intent(this,WeatherActivity.class);
             startActivity(intent);
             finish();
@@ -83,6 +88,7 @@ public class ChooseAreaActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override //这里参数变量名称与原文不太一样
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listIndex=position;
                 if (currentLevel==LEVEL_PROVINCE){
                     selectedProvince=provinceList.get(position);
                     queryCities();
@@ -93,8 +99,11 @@ public class ChooseAreaActivity extends Activity {
                     String countyName=countyList.get(position).getCountyName();
                     Intent intent =new Intent(ChooseAreaActivity.this,WeatherActivity.class);
                     intent.putExtra("couunty_name",countyName);//这里传递的是地区名,原文中传递的是地区代号
+                    City city= coolWeatherDB.getCityInfoById(Integer.toString(countyList.get(position).getCityId()));
+                    intent.putExtra("city_name",city.getCityName()
+                      );
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
             }
         });
@@ -220,6 +229,12 @@ public class ChooseAreaActivity extends Activity {
                             }
                         }
                     });
+                }else {  //如果没有县如北京的海淀,直接查询海淀
+                    Intent intent =new Intent(ChooseAreaActivity.this,WeatherActivity.class);
+                    City city= cityList.get(listIndex);
+                    intent.putExtra("city_name",city.getCityName()
+                    );
+                    startActivity(intent);
                 }
             }
 
@@ -253,6 +268,10 @@ public class ChooseAreaActivity extends Activity {
         }else if (currentLevel==LEVEL_CITY){
             queryProvinces();
         }else {
+            if (isFromWeatherActivity){
+                Intent intent =new Intent(this,WeatherActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

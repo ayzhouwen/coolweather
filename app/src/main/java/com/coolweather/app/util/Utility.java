@@ -76,6 +76,10 @@ public class Utility {
             if (!TextUtils.isEmpty(response)){
                 {
                     JSONObject jobj = JSON.parseObject(response);
+
+                    if (TextUtils.isEmpty( jobj.get("result").toString()) ){
+                        return false;
+                     }
                     JSONArray jArray=jobj.getJSONArray("result");
                     List<County> list=JSONArray.parseArray(jArray.toString(), County.class);
                     if (list !=null &&list.size()>0){

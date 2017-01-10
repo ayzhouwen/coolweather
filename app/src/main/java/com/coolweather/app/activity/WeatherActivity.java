@@ -73,12 +73,13 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         switchCity = (Button) findViewById(R.id.switch_city);
         refreshWeather = (Button) findViewById(R.id.refresh_weather);
         String couunty_name = getIntent().getStringExtra("couunty_name");
-        if (!TextUtils.isEmpty(couunty_name)) {
+        String city_name = getIntent().getStringExtra("city_name");
+        if (!TextUtils.isEmpty(couunty_name)||!TextUtils.isEmpty(city_name)) {
             //有县级代号时就去查询天气
             publishText.setText("同步中...");
             weatherInfoLayout.setVisibility(View.INVISIBLE);
             cityNameText.setVisibility(View.INVISIBLE);
-            queryWeatherCode(couunty_name);
+            queryWeatherCode(couunty_name,city_name);
         } else {
             //没有县级代号时就直接显示本地天气
             showWeather();
@@ -110,8 +111,9 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    //查询县级代号所对应的天气代号,原文需要掉API,现在根据县名称只从文本文件中查找
-    private void queryWeatherCode(String countyName) {
+    //查询县级代号所对应的天气代号,原文需要掉API,现在根据县名称只从文本文件中查找,
+    //如果找不到比如是市区名名称,则用市名称再次查找,哎天气接口很烂,我也没办法
+    private void queryWeatherCode(String countyName,String cityName ) {
 
         if (weatherList.size() <1) {
             InputStream inputStream = getResources().openRawResource(R.raw.weathercode);
@@ -139,12 +141,18 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             }
         }
        String wc=  findWeatherCode(countyName);
+        if (TextUtils.isEmpty(wc)){
+            wc=  findWeatherCode(cityName);
+        }
         String address = "http://www.weather.com.cn/data/cityinfo/" + wc + ".html";
         queryFromServer(address,wc);
 
     }
 
     private  String findWeatherCode(String countyName){
+        if (TextUtils.isEmpty(countyName)){
+            return "";
+        }
         for (WeatherCode node:weatherList){
             if (node.getAreaString().equals(countyName)||node.getAreaString().contains(countyName)||
                     countyName.contains(node.getAreaString())){

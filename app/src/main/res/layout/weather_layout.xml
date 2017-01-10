@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textSize="24sp"
+
+        android:textColor="#fff"
         />
     <Button
         android:id="@+id/refresh_weather"
@@ -48,8 +50,9 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:textColor="#fff"
+            android:textColor="#ffffff"
             android:textSize="18sp"
+
             />
         <LinearLayout
             android:id="@+id/weather_info_layout"
